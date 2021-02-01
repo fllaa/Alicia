@@ -1,0 +1,5 @@
+pyrogram
+tgcrypto
+configparser
+sqlalchemy
+psycopg2-binary
