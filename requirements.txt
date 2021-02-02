@@ -10,3 +10,4 @@ aiohttp
 speedtest-cli
 psutil
 spamwatch
+nekobin
