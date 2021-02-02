@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from alicia import OWNER_ID, alia, bot_name, bot_username
 
 PM_START_TEXT = f"""
-Kon'nichiwa! my name is *{bot_name}*. If you have any questions on how to use me, Click Help button.
+Hi! my name is **{bot_name}**. If you have any questions on how to use me, Click Help button.
 I'm here to make your group management fun and easy!
 i have lots of handy features, such as flood control, a warning system, a note keeping system, and even replies on predetermined filters.
 Thanks to [my creator](tg://user?id={OWNER_ID}).
@@ -24,10 +24,10 @@ buttons += [[InlineKeyboardButton(text="Help & Commands ❔",
                                   url=f"t.me/{bot_username}?start=help",)]]
 
 HELP_STRINGS = f"""
-Kon'nichiwa! My name is *{bot_name}*.
+Hi! My name is **{bot_name}**.
 I'm a advanced modular group management bot with a lot of additional features! \
 Have a look at the following for an idea of some of the things I can help you with.
-*Main* commands available:
+**Main** commands available:
  × /start: Starts me, can be used to check i'm alive or no...
  × /help: PM's you this message.
  × /help <module name>: PM's you info about that module.
