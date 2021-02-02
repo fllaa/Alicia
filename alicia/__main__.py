@@ -61,12 +61,18 @@ for module_name in ALL_MODULES:
         USER_SETTINGS[imported_module.__mod_name__.lower()] = imported_module
 
 
-async def start_bot():
+async def reinitial():
     await alia.start()
     await get_bot()
+    await alia.stop()
+
+
+async def start_bot():
+    await reinitial()
+    await alia.start()
+    LOGGER.info("Alicia goes brrr...")
+    await idle()
 
 
 if __name__ == "__main__":
     loop.run_until_complete(start_bot())
-    LOGGER.info("Alicia goes brrr...")
-    idle()

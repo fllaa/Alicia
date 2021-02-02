@@ -46,7 +46,7 @@ async def start(client, message):
     try:
         await message.reply_video(IMG, caption=PM_START_TEXT, parse_mode="markdown", reply_markup=InlineKeyboardMarkup(buttons))
     except Exception as excp:
-        await message.reply_video(f"Error: {excp}")
+        await message.reply_text(f"Error: {excp}")
 
 
 @alia.on_message(filters.command("help"))
