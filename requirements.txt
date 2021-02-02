@@ -6,3 +6,7 @@ psycopg2-binary
 bleach
 markdown2
 emoji
+aiohttp
+speedtest-cli
+psutil
+spamwatch

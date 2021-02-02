@@ -29,6 +29,7 @@ LOAD = botconfig.get("LOAD").split()
 LOAD = list(map(str, LOAD))
 NOLOAD = botconfig.get("NOLOAD").split()
 NOLOAD = list(map(str, NOLOAD))
+MESSAGE_DUMP = botconfig.get("MESSAGE_DUMP")
 IMG = botconfig.get("IMG")
 
 
