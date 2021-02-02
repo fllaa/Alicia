@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from alicia import OWNER_ID, alia, bot_name, bot_username
+from alicia import IMG, OWNER_ID, alia, bot_name, bot_username
 
 PM_START_TEXT = f"""
 Hi! my name is **{bot_name}**. If you have any questions on how to use me, Click Help button.
@@ -35,8 +35,6 @@ Have a look at the following for an idea of some of the things I can help you wi
    - in a group: will redirect you to pm, with all that chat's settings.
  \nClick on the buttons below to get documentation about specific modules!"""
 
-IMG = "https://telegra.ph/file/3a864035c2f7d46a66a45.mp4"
-
 
 @alia.on_message(filters.command("start"))
 async def start(client, message):
@@ -44,7 +42,7 @@ async def start(client, message):
         await message.reply_text("Hi! I am Alive here!")
         return
     try:
-        await message.reply_video(IMG, caption=PM_START_TEXT, parse_mode="markdown", reply_markup=InlineKeyboardMarkup(buttons))
+        await message.reply_photo(IMG, caption=PM_START_TEXT, parse_mode="markdown", reply_markup=InlineKeyboardMarkup(buttons))
     except Exception as excp:
         await message.reply_text(f"Error: {excp}")
 

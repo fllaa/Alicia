@@ -29,6 +29,7 @@ LOAD = botconfig.get("LOAD").split()
 LOAD = list(map(str, LOAD))
 NOLOAD = botconfig.get("NOLOAD").split()
 NOLOAD = list(map(str, NOLOAD))
+IMG = botconfig.get("IMG")
 
 
 alia = Client(":memory", config_file="config.ini")
