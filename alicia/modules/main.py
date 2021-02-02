@@ -58,7 +58,7 @@ async def help(client, message):
                     text="Help",
                     url="t.me/{}?start=help".format(bot_username))
         ]]
-        await message.reply.text("Contact me in PM to get the list of possible commands.", reply_markup=InlineKeyboardMarkup(button))
+        await message.reply_text("Contact me in PM to get the list of possible commands.", reply_markup=InlineKeyboardMarkup(button))
         return
     try:
         await message.reply_text(HELP_STRINGS, parse_mode="markdown")
