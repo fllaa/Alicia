@@ -3,3 +3,6 @@ tgcrypto
 configparser
 sqlalchemy
 psycopg2-binary
+bleach
+markdown2
+emoji
