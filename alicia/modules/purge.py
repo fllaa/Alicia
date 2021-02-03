@@ -13,11 +13,15 @@ async def purge(client, message):
     if message.reply_to_message:
         user = message.from_user
         chat = message.chat
-        user_rights = (await chat.get_member(user.id)).can_delete_messages
+        try:
+            user_rights = (await chat.get_member(user.id)).can_delete_messages
+            bot_rights = (await chat.get_member(bot_id)).can_delete_messages
+        except ValueError:
+            user_rights = True
+            bot_rights = True
         if not user_rights:
             await message.reply_text("You're not admin!")
             return
-        bot_rights = (await chat.get_member(bot_id)).can_delete_messages
         if bot_rights:
             message_id = message.reply_to_message.message_id
             delete_to = message.message_id - 1
