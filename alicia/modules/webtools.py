@@ -174,7 +174,7 @@ async def restart(client, message):
         await client.send_message(
             chat_id=MESSAGE_DUMP,
             text=message,
-            parse_mode=ParseMode.HTML,
+            parse_mode="HTML",
             disable_web_page_preview=True,
         )
 
