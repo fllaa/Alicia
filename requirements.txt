@@ -11,3 +11,4 @@ speedtest-cli
 psutil
 spamwatch
 nekobin
+nekos.py
