@@ -12,3 +12,5 @@ psutil
 spamwatch
 nekobin
 nekos.py
+deezloader
+tswift

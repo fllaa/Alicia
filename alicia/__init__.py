@@ -31,6 +31,8 @@ NOLOAD = botconfig.get("NOLOAD").split()
 NOLOAD = list(map(str, NOLOAD))
 MESSAGE_DUMP = botconfig.get("MESSAGE_DUMP")
 IMG = botconfig.get("IMG")
+ARL = botconfig.get("ARL")
+LASTFM_API_KEY = botconfig.get("LASTFM_API_KEY")
 
 
 alia = Client(":memory", config_file="config.ini")
