@@ -15,3 +15,6 @@ nekobin
 nekos.py
 deezloader
 tswift
+google_trans_new
+gtts
+
