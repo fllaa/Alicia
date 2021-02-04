@@ -33,6 +33,7 @@ MESSAGE_DUMP = botconfig.get("MESSAGE_DUMP")
 IMG = botconfig.get("IMG")
 ARL = botconfig.get("ARL")
 LASTFM_API_KEY = botconfig.get("LASTFM_API_KEY")
+API_WEATHER = botconfig.get("API_WEATHER")
 
 
 alia = Client(":memory", config_file="config.ini")
