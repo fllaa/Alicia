@@ -1,10 +1,9 @@
 import datetime
-import json
 
-import requests
 from pyrogram import filters
 
 from alicia import alia
+from alicia.utils import AioHttp
 
 
 def dot(number, thousand_separator="."):
@@ -39,8 +38,7 @@ async def covid(client, message):
     else:
         url = "https://disease.sh/v3/covid-19/all?yesterday=false&twoDaysAgo=false&allowNull=true"
         country = "World"
-    resp = requests.get(url).text
-    case = json.loads(resp)
+    case = await AioHttp().get_json(url)
     try:
         json_date = case["updated"]
     except KeyError:

@@ -1,11 +1,12 @@
 import os
 
+import aiofiles
 import nekos
-import requests
 from nekos.errors import InvalidArgument
 from pyrogram import filters
 
 from alicia import alia
+from alicia.utils import AioHttp
 
 
 @alia.on_message(filters.command("neko"))
@@ -28,17 +29,17 @@ async def neko(client, message):
         return
     try:
         if flag == "-i":
-            await message.reply_photo(photo=img, parse_mode="markdown")
+            await message.reply_photo(img, parse_mode="markdown")
         elif flag == "-d":
-            await message.reply_document(document=img, parse_mode="markdown")
+            await message.reply_document(img, parse_mode="markdown")
         elif flag == "-s":
             stkr = "sticker.webp"
-            with open(stkr, "wb") as f:
-                f.write(requests.get(img).content)
+            f = await aiofiles.open(stkr, mode="wb")
+            await f.write(await AioHttp.get_raw(img))
             await message.reply_sticker(sticker=open(stkr, "rb"))
             os.remove("sticker.webp")
         elif flag == "-v":
-            await message.reply_video(video=img, parse_mode="markdown")
+            await message.reply_video(img, parse_mode="markdown")
         else:
             await message.reply_text("Put flags correctly!!!")
     except Exception as excp:

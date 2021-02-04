@@ -3,13 +3,13 @@ import os
 import shutil
 
 import deezloader
-import requests
 from deezloader.exceptions import NoDataApi
 from pyrogram import filters
 from tswift import Song
 
 import alicia.modules.sql.last_fm_sql as sql
 from alicia import ARL, LASTFM_API_KEY, alia
+from alicia.utils import AioHttp
 
 TEMP_PATH = "deez_temp/"
 
@@ -120,17 +120,20 @@ async def last_fm(client, message):
         return
 
     base_url = "http://ws.audioscrobbler.com/2.0"
-    res = requests.get(
+    res = await AioHttp().get_json(
         f"{base_url}?method=user.getrecenttracks&limit=3&extended=1&user={username}&api_key={LASTFM_API_KEY}&format=json"
     )
-    if res.status_code != 200:
-        await message.reply_text(
-            "Hmm... something went wrong.\nPlease ensure that you've set the correct username!"
-        )
+    try:
+        if res["message"] == "User not found":
+            await message.reply_text(
+                "Hmm... something went wrong.\nPlease ensure that you've set the correct username!"
+            )
         return
+    except KeyError:
+        pass
 
     try:
-        first_track = res.json().get("recenttracks").get("track")[0]
+        first_track = res.get("recenttracks").get("track")[0]
     except IndexError:
         await message.reply_text("You don't seem to have scrobbled any songs...")
         return
@@ -148,7 +151,7 @@ async def last_fm(client, message):
         if image:
             rep += f"<a href='{image}'>\u200c</a>"
     else:
-        tracks = res.json().get("recenttracks").get("track")
+        tracks = res.get("recenttracks").get("track")
         track_dict = {
             tracks[i].get("artist").get("name"): tracks[i].get("name") for i in range(3)
         }
@@ -156,10 +159,9 @@ async def last_fm(client, message):
         for artist, song in track_dict.items():
             rep += f"🎧  <code>{artist} - {song}</code>\n"
         last_user = (
-            requests.get(
+            (await AioHttp().get_json(
                 f"{base_url}?method=user.getinfo&user={username}&api_key={LASTFM_API_KEY}&format=json"
-            )
-            .json()
+            ))
             .get("user")
         )
         scrobbles = last_user.get("playcount")

@@ -9,7 +9,6 @@ import time
 import traceback
 from platform import python_version
 
-import aiohttp
 import speedtest
 from psutil import boot_time, cpu_percent, disk_usage, virtual_memory
 from pyrogram import __version__ as __pyro__
@@ -18,8 +17,7 @@ from pyrogram.errors import BadRequest
 from spamwatch import __version__ as __sw__
 
 from alicia import MESSAGE_DUMP, OWNER_ID, alia
-
-session = aiohttp.ClientSession()
+from alicia.utils import AioHttp
 
 
 @alia.on_message(filters.command("ping"))
@@ -52,8 +50,8 @@ async def get_bot_ip(client, message):
     """Sends the bot's IP address, so as to be able to ssh in if necessary.
     OWNER ONLY.
     """
-    async with session.get("http://ipinfo.io/ip") as res:
-        await message.reply_text(res.text)
+    res = await AioHttp().get_text("http://ipinfo.io/ip")
+    await message.reply_text(res)
 
 
 @alia.on_message(
