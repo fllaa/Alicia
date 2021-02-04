@@ -19,3 +19,9 @@ class AioHttp:
         async with aiohttp.ClientSession() as session:
             async with session.get(link, params=params) as resp:
                 return await resp.read()
+
+    @staticmethod
+    async def post_json(link, json=None):
+        async with aiohttp.ClientSession() as session:
+            async with session.post(link, json=json) as resp:
+                return await resp.json()
