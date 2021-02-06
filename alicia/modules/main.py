@@ -71,9 +71,10 @@ async def send_start(client, query):
 async def send_help(client, chat_id, text, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
-    await client.send_message(
+    await client.send_photo(
         chat_id=chat_id,
-        text=text,
+        photo=IMG,
+        caption=text,
         parse_mode="markdown",
         reply_markup=keyboard)
 
