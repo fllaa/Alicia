@@ -1,9 +1,10 @@
 from math import ceil
 from typing import List, Dict
 
-from pyrogram import Client, InlineKeyboardButton
+from pyrogram import Client
+from pyrogram.types import InlineKeyboardButton
 
-from alicia import LOAD, NO_LOAD
+from alicia import LOAD, NOLOAD
 
 MAX_MESSAGE_LENGTH = 4096
 
