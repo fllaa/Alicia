@@ -8,6 +8,8 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO)
 
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
+
 LOGGER = logging.getLogger(__name__)
 
 LOGGER.info("Starting Alicia...")
@@ -36,7 +38,7 @@ LASTFM_API_KEY = botconfig.get("LASTFM_API_KEY")
 API_WEATHER = botconfig.get("API_WEATHER")
 
 
-alia = Client(":memory", config_file="config.ini")
+alia = Client(":memory:", config_file="config.ini")
 
 bot_name = ""
 bot_username = ""
