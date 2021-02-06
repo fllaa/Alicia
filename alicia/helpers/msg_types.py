@@ -2,7 +2,7 @@ from enum import IntEnum, unique
 
 from pyrogram.types import Message
 
-from priscia.helpers import button_markdown_parser
+from alicia.helpers import button_markdown_parser
 
 
 @unique

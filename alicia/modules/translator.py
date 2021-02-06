@@ -54,12 +54,12 @@ async def gtts(client, message):
         reply = reply.replace(x, "")
     try:
         tts = gTTS(reply)
-        tts.save("priscia.mp3")
-        with open("priscia.mp3", "rb") as speech:
+        tts.save("alicia.mp3")
+        with open("alicia.mp3", "rb") as speech:
             await message.reply_audio(speech)
     finally:
-        if os.path.isfile("priscia.mp3"):
-            os.remove("priscia.mp3")
+        if os.path.isfile("alicia.mp3"):
+            os.remove("alicia.mp3")
 
 
 # Open API key
