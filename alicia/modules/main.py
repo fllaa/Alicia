@@ -41,12 +41,31 @@ Have a look at the following for an idea of some of the things I can help you wi
  \nClick on the buttons below to get documentation about specific modules!"""
 
 
+async def help_button_callback(_, __, query):
+    if re.match(r"help_", query.data):
+        return True
+
+
+async def start_callback(_, __, query):
+    if re.match(r"bot_start", query.data):
+        return True
+
+
+help_button_create = filters.create(help_button_callback)
+start_callback_create = filters.create(start_callback)
+
+
 @alia.on_message(filters.command("start"))
 async def start(client, message):
     if message.chat.type != "private":
         await message.reply_text("Hi! I am Alive here!")
         return
     await message.reply_photo(IMG, caption=PM_START_TEXT, parse_mode="markdown", reply_markup=InlineKeyboardMarkup(buttons))
+
+
+@alia.on_callback_query(start_callback_create)
+async def send_start(client, query):
+    await query.message.edit(text=PM_START_TEXT, parse_mode="markdown", reply_markup=InlineKeyboardMarkup(buttons))
 
 
 async def send_help(client, chat_id, text, keyboard=None):
@@ -57,14 +76,6 @@ async def send_help(client, chat_id, text, keyboard=None):
         text=text,
         parse_mode="markdown",
         reply_markup=keyboard)
-
-
-async def help_button_callback(_, __, query):
-    if re.match(r"help_", query.data):
-        return True
-
-
-help_button_create = filters.create(help_button_callback)
 
 
 @alia.on_callback_query(help_button_create)
