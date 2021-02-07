@@ -1,6 +1,7 @@
 from typing import List, Optional
 
-from pyrogram import Client, Message
+from pyrogram import Client
+from pyrogram .types import Message
 from pyrogram.errors import BadRequest
 from pyrogram.raw.types import MessageEntityMentionName
 
