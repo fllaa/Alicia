@@ -19,7 +19,7 @@ buttons = [
     [
         InlineKeyboardButton(
             text="Add to Group 👥",
-            url="t.me/{bot_username}?startgroup=true"),
+            url=f"t.me/{bot_username}?startgroup=true"),
         InlineKeyboardButton(
             text="Join Channel ℹ️",
             url="https://t.me/fvllprojekt"),

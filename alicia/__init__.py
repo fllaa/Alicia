@@ -38,7 +38,7 @@ LASTFM_API_KEY = botconfig.get("LASTFM_API_KEY")
 API_WEATHER = botconfig.get("API_WEATHER")
 
 
-alia = Client(":memory", config_file="config.ini")
+alia = Client(":memory:", config_file="config.ini")
 
 bot_name = ""
 bot_username = ""
