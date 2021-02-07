@@ -141,7 +141,7 @@ def revert_buttons(buttons):
 
 
 def is_module_loaded(name):
-    return (not LOAD or name in LOAD) and name not in NO_LOAD
+    return (not LOAD or name in LOAD) and name not in NOLOAD
 
 
 def build_keyboard_parser(bot, chat_id, buttons):
