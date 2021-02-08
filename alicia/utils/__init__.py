@@ -10,7 +10,7 @@ from .anime_sauce import (  # noqa
     user_query,
     url,
 )
-from .parser import escape_markdown  # noqa
+from .parser import escape_markdown, mention_html  # noqa
 from .shorten_desc import shorten  # noqa
 from .time_formatter import f_time  # noqa
 from .users import get_user_id  # noqa
