@@ -19,4 +19,4 @@ google_trans_new
 gtts
 pytz
 jikanpy
-
+wikipedia

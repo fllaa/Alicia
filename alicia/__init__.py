@@ -1,6 +1,7 @@
 import sys
 import logging
 
+import spamwatch
 from pyrogram import Client
 from configparser import ConfigParser
 
@@ -36,6 +37,8 @@ IMG = botconfig.get("IMG")
 ARL = botconfig.get("ARL")
 LASTFM_API_KEY = botconfig.get("LASTFM_API_KEY")
 API_WEATHER = botconfig.get("API_WEATHER")
+SPAMWATCH = botconfig.get("SPAMWATCH")
+WALL_API = botconfig.get("WALL_API")
 
 
 alia = Client(":memory:", config_file="config.ini")
@@ -43,6 +46,12 @@ alia = Client(":memory:", config_file="config.ini")
 bot_name = ""
 bot_username = ""
 bot_id = 0
+
+if SPAMWATCH is None:
+    spamwtc = None
+    LOGGER.warning("Invalid spamwatch api")
+else:
+    spamwtc = spamwatch.Client(SPAMWATCH)
 
 async def get_bot():
     global bot_id, bot_name, bot_username
