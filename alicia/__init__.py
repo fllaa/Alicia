@@ -39,6 +39,7 @@ LASTFM_API_KEY = botconfig.get("LASTFM_API_KEY")
 API_WEATHER = botconfig.get("API_WEATHER")
 SPAMWATCH = botconfig.get("SPAMWATCH")
 WALL_API = botconfig.get("WALL_API")
+BRAINLY_API = botconfig.get("BRAINLY_API")
 
 
 alia = Client(":memory:", config_file="config.ini")
