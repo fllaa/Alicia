@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 from pyrogram import filters
 from pyrogram.errors import BadRequest
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.raw.types import MessageEntityMentionName
 
 from alicia import (
     OWNER_ID,
@@ -19,20 +18,31 @@ from alicia import (
     spamwtc,
 )
 from alicia.__main__ import GDPR, STATS, USER_INFO
-from alicia.helpers import extract_user
 from alicia.utils import AioHttp, escape_markdown, mention_html
 
 
 @alia.on_message(filters.command("id"))
 async def get_id(client, message):
-    args = message.text.split(None, 1)[1]
-    user_id = extract_user(message, args)
-    if user_id:
-        if (
-            message.reply_to_message
-            and message.reply_to_message.forward_from
-        ):
-            user1 = message.reply_to_message.from_user
+    chat = message.chat
+    args = message.text.split(None, 1)
+    if len(args) >= 2:
+        username = args[1]
+        if chat.type == "private":
+            await message.reply_text("I can't get him id in Private chat, try on Group chat!")
+            return
+        if not username.startswith("@"):
+            await message.reply_text("it's not username bruh")
+            return
+        username = username.replace("@", "")
+        member = await client.get_chat_member(chat.id, username)
+        user = member.user
+        await message.reply_text(
+                "{}'s id is `{}`.".format(escape_markdown(user.first_name), user.id),
+                parse_mode="markdown",
+            )
+    elif message.reply_to_message:
+        user1 = message.reply_to_message.from_user
+        if message.reply_to_message_forward_from:
             user2 = message.reply_to_message.forward_from
             await message.reply_text(
                 "The original sender, {}, has an ID of `{}`.\nThe forwarder, {}, has an ID of `{}`.".format(
@@ -44,50 +54,42 @@ async def get_id(client, message):
                 parse_mode="markdown",
             )
         else:
-            user = await client.get_chat(user_id)
             await message.reply_text(
-                "{}'s id is `{}`.".format(escape_markdown(user.first_name), user.id),
+                "{}'s id is `{}`.".format(escape_markdown(user1.first_name), user1.id),
                 parse_mode="markdown",
             )
     else:
-        if message.chat.type == "private":
-            await message.reply_text(
-                "Your id is `{}`.".format(message.from_user.id), parse_mode="markdown"
-            )
-
-        else:
-            await message.reply_text(
-                "This group's id is `{}`.".format(message.chat.id),
-                parse_mode="markdown",
-            )
+        await message.reply_text(
+            "Your id is `{}`.".format(message.from_user.id), parse_mode="markdown"
+        )
 
 
 @alia.on_message(filters.command("info"))
 async def info(client, message):
-    args = message.text.split(None, 1)[1]
-    user_id = extract_user(message, args)
     chat = message.chat
-    if user_id:
-        user = await client.get_chat(user_id)
-    elif not message.reply_to_message and not args:
-        user = message.from_user
-    elif not message.reply_to_message and (
-        not args
-        or (
-            len(args) >= 1
-            and not args[0].startswith("@")
-            and not args[0].isdigit()
-            and not message.entities == MessageEntityMentionName
-        )
-    ):
-        await message.reply_text("I can't extract a user from this.")
-        return
+    args = message.text.split(None, 1)
+    if len(args) >= 2:
+        args = args[1]
+        if args.startswith("@"):
+            user_id = args.replace("@","")
+        elif args.isdigit():
+            user_id = int(args)
+        else:
+            await message.reply_text("I can't get info from that")
+            return
+    elif message.reply_to_message:
+        user_id = message.reply_to_message.from_user.id
     else:
-        return
+        user_id = message.from_user.id
     del_msg = await message.reply_text(
         "Hold tight while I steal some data from <b>FBI Database</b>...",
         parse_mode="HTML",
     )
+    if chat.type == "group":
+        member = await client.get_chat_member(chat.id, user_id)
+        user = member.user
+    else:
+        user = await client.get_users(user_id)
     text = (
         "<b>USER INFO</b>:"
         "\n\nID: <code>{}</code>"
@@ -114,12 +116,11 @@ async def info(client, message):
     elif user.id == int(1087968824):
         text += "\n\nThis person is anonymous admin in this group. "
     try:
-        memstatus = chat.get_member(user.id).status
+        memstatus = member.status
         if memstatus in ["administrator", "creator"]:
-            result = await client.get_chat_member(chat.id, user.id)
-            if result.title:
-                text += f"\n\nThis user has custom title <b>{result.title}</b> in this chat."
-    except BadRequest:
+            if member.title:
+                text += f"\n\nThis user has custom title <b>{member.title}</b> in this chat."
+    except BaseException:
         pass
     for mod in USER_INFO:
         try:
@@ -129,11 +130,12 @@ async def info(client, message):
         if mod_info:
             text += "\n\n" + mod_info
     try:
-        profile = await client.get_user_profile_photos(user.id).file_id
+        profile = await client.get_profile_photos(user.id, limit=1)
+        pic_id = profile[0]["file_id"]
         await client.send_chat_action(chat.id, "upload_photo")
         await client.send_photo(
             chat.id,
-            photo=profile,
+            photo=pic_id,
             caption=(text),
             parse_mode="HTML",
         )
@@ -141,7 +143,7 @@ async def info(client, message):
         await client.send_chat_action(chat.id, "typing")
         await message.reply_text(text, parse_mode="HTML", disable_web_page_preview=True)
     finally:
-        del_msg.delete()
+        await del_msg.delete()
 
 
 @alia.on_message(filters.user(OWNER_ID) & filters.command("echo"))
@@ -253,8 +255,8 @@ async def ud(client, message):
         return
     text = args[1].lower()
     try:
-        results = await AioHttp().get_json(f"http://api.urbandictionary.com/v0/async define?term={text}")
-        reply_text = f'Word: {text}\nasync definition: {results["list"][0]["async definition"]}'
+        results = await AioHttp().get_json(f"http://api.urbandictionary.com/v0/define?term={text}")
+        reply_text = f'Word: {text}\ndefinition: {results["list"][0]["definition"]}'
         reply_text += f'\n\nExample: {results["list"][0]["example"]}'
     except IndexError:
         reply_text = (
@@ -301,15 +303,13 @@ async def wall(client, message):
         photo=wallpaper,
         caption="Preview",
         reply_to_message_id=msg_id,
-        timeout=60,
     )
     await client.send_document(
         chat_id,
         document=wallpaper,
-        filename="wallpaper",
+        file_name="wallpaper",
         caption=caption,
         reply_to_message_id=msg_id,
-        timeout=60,
     )
 
 
@@ -438,7 +438,6 @@ async def rmemes(client, message):
             photo=memeu,
             caption=(caps),
             reply_markup=InlineKeyboardMarkup(keyb),
-            timeout=60,
             parse_mode="HTML",
         )
     except BadRequest as excp:
