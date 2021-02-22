@@ -6,7 +6,6 @@ from pyrogram.errors import BadRequest
 
 import alicia.helpers.fun_strings as fun
 from alicia import LOGGER, OWNER_ID, alia, bot_id, bot_name
-from alicia.helpers import extract_user
 from alicia.utils import AioHttp, escape_markdown
 
 MAX_MESSAGE_LENGTH = 4096
@@ -19,8 +18,14 @@ async def runs(client, message):
 
 @alia.on_message(filters.command("slap"))
 async def slap(client, message):
-    text = message.text.split(None, 1)
-    args = text[1]
+    args = message.text.split(None, 1)
+    user = ""
+    if len(args) >= 2:
+        username = args[1]
+        if not username.startswith("@"):
+            await message.reply_text("Slap what?")
+            return
+        user = username.replace("@", "")
     # reply to correct message
     reply_text = (
         await message.reply_to_message.reply_text if message.reply_to_message else await message.reply_text
@@ -32,9 +37,8 @@ async def slap(client, message):
         curr_user = "[{}](tg://user?id={})".format(
             message.from_user.first_name, message.from_user.id
         )
-    user_id = extract_user(message, args)
-    if user_id:
-        slapped_user = await client.get_chat(user_id)
+    if user:
+        slapped_user = await client.get_users(user)
         user1 = curr_user
         if slapped_user.username:
             user2 = "@" + escape_markdown(slapped_user.username)
@@ -56,8 +60,14 @@ async def slap(client, message):
 
 @alia.on_message(filters.command("punch"))
 async def punch(client, message):
-    text = message.text.split(None, 1)
-    args = text[1]
+    args = message.text.split(None, 1)
+    user = ""
+    if len(args) >= 2:
+        username = args[1]
+        if not username.startswith("@"):
+            await message.reply_text("Punch who?")
+            return
+        user = username.replace("@", "")
     # reply to correct message
     reply_text = (
         await message.reply_to_message.reply_text if message.reply_to_message else await message.reply_text
@@ -69,9 +79,8 @@ async def punch(client, message):
         curr_user = "[{}](tg://user?id={})".format(
             message.from_user.first_name, message.from_user.id
         )
-    user_id = extract_user(message, args)
-    if user_id:
-        punched_user = await client.get_chat(user_id)
+    if user:
+        punched_user = await client.get_users(user)
         user1 = curr_user
         if punched_user.username:
             user2 = "@" + escape_markdown(punched_user.username)
@@ -92,8 +101,14 @@ async def punch(client, message):
 
 @alia.on_message(filters.command("hug"))
 async def hug(client, message):
-    text = message.split.text(None, 1)
-    args = text[1]
+    args = message.text.split(None, 1)
+    user = ""
+    if len(args) >= 2:
+        username = args[1]
+        if not username.startswith("@"):
+            await message.reply_text("Hug who?")
+            return
+        user = username.replace("@", "")
     # reply to correct message
     reply_text = (
         await message.reply_to_message.reply_text if message.reply_to_message else await message.reply_text
@@ -105,9 +120,8 @@ async def hug(client, message):
         curr_user = "[{}](tg://user?id={})".format(
             message.from_user.first_name, message.from_user.id
         )
-    user_id = extract_user(message, args)
-    if user_id:
-        hugged_user = await client.get_chat(user_id)
+    if user:
+        hugged_user = await client.get_users(user)
         user1 = curr_user
         if hugged_user.username:
             user2 = "@" + escape_markdown(hugged_user.username)

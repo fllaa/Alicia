@@ -1,5 +1,6 @@
 import json
 
+import requests
 from bs4 import BeautifulSoup
 from pyrogram import filters
 
@@ -98,7 +99,7 @@ async def twrp(client, message):
     except KeyError:
         pass
     try:
-        page = BeautifulSoup((await AioHttp().get(url)).content, "lxml")
+        page = BeautifulSoup(requests.get(url).content, "lxml")
         date = page.find("em").text.strip()
         reply += f"*Updated:* {date}\n"
         trs = page.find("table").find_all("tr")

@@ -4,6 +4,7 @@ import random
 import re
 from random import randint
 
+import requests
 import wikipedia
 from bs4 import BeautifulSoup
 from pyrogram import filters
@@ -320,7 +321,7 @@ async def imdb(client, message):
         movie_name = args[1]
         remove_space = movie_name.split(" ")
         final_name = "+".join(remove_space)
-        page = await AioHttp().get(
+        page = requests.get(
             "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
         )
         soup = BeautifulSoup(page.content, "lxml")
@@ -329,7 +330,7 @@ async def imdb(client, message):
         mov_link = (
             "http://www.imdb.com/" + odds[0].findNext("td").findNext("td").a["href"]
         )
-        page1 = await AioHttp().get(mov_link)
+        page1 = requests.get(mov_link)
         soup = BeautifulSoup(page1.content, "lxml")
         if soup.find("div", "poster"):
             poster = soup.find("div", "poster").img["src"]
